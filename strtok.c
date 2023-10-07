@@ -1,40 +1,61 @@
 #include "unixshell.h"
 
-char *custom_getline(void)
+char *custom_strtok(char *str, const char *delim, char **saveptr)
 {
-	static char buffer[BUFFER_SIZE];
-	static int pos = 0;
-	int c;
+    if (str != NULL)
+        *saveptr = str;
 
-	/* Read characters from stdin until a newline or EOF is encountered */
-	while ((c = getchar()) != EOF && c != '\n')
-	{
-		/* Add the character to the buffer if there is space */
-		if (pos < (BUFFER_SIZE - 1))
-			buffer[pos++] = c;
-	}
+    else if (*saveptr == NULL || **saveptr == '\0')
+        return NULL; /* No more tokens to tokenize */
 
-	/* Add a null terminator to the end of the buffer */
-	buffer[pos] = '\0';
-	pos = 0;
+    /* Find the start of the token */
+    char *token_start = *saveptr;
+    while (*token_start != '\0' && strchr(delim, *token_start) != NULL)
+    {
+        token_start++;
+    }
 
-	return buffer;
+    if (*token_start == '\0')
+    {
+        *saveptr = NULL; /* There is no more tokens to tokenize */
+        return NULL;
+    }
+
+    /* Find the end of the token*/
+    char *token_end = token_start;
+    while (*token_end != '\0' && strchr(delim, *token_end) == NULL)
+    {
+        token_end++;
+    }
+
+    /* Null-terminate the token and update saveptr */
+    if (*token_end != '\0')
+    {
+        *token_end = '\0';
+        *saveptr = token_end + 1;
+    }
+    else
+    {
+        *saveptr = NULL;
+    }
+
+    return token_start;
 }
 
-int main()
-{
-	char *line;
-	while (1)
-	{
-		printf("> ");
-		line = custom_getline();
-		while (*line)
-		{
-			putchar(*line);
-			line++;
-		}
-		putchar(10);
-	}
 
-	return 0;
+int main(void)
+{
+    char input[] = "Hello, world! This is a test.";
+    char *token;
+    char *saveptr;
+
+    token = custom_strtok(input, " ,!.", &saveptr);
+    while (token != NULL)
+    {
+        printf("%s\n", token);
+        token = custom_strtok(NULL, " ,!.", &saveptr);
+    }
+
+    return 0;
 }
+
