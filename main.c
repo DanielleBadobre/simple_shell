@@ -3,17 +3,30 @@
 
 int main(void)
 {
-	char str[] = "Christ is Lord";
-	const char * delim = " ";
-	char *token = NULL;
-	char *saveptr;
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t read;
 
-	token = _strtok(str, delim, &saveptr);
-	while(token != NULL)
+	while (1)
 	{
-		printf("%s\n", token);
-		token = _strtok(NULL, delim, &saveptr);
+		printf("$ ");
+		read = _getline(&line, &len);
+
+		if (read != -1)
+		{
+			printf("%s", line);
+		}
+		else
+		{
+			if (read == -1)
+				printf("End of input reached (Ctrl+D).\n");
+			else
+				perror("_getline");
+			break;
+		}
 	}
+
+	free(line); // Don't forget to free the allocated memory
 
 	return 0;
 }
