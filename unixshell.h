@@ -13,5 +13,7 @@
 
 #define TRUE 1
 #define BUFFER_SIZE 4321
+ssize_t _getline(char **linebuff, size_t *n);
+
 
 #endif

@@ -1,40 +1,54 @@
 #include "unixshell.h"
 
-char *custom_getline(void)
+ssize_t _getline(char **linebuff, size_t *n)
 {
-	static char buffer[BUFFER_SIZE];
-	static int pos = 0;
 	int c;
+	ssize_t byte_read, buff_size, len = 0;
+	*n = 0;
+	buff_size = *n;
+	*linebuff = NULL;
 
-	/* Read characters from stdin until a newline or EOF is encountered */
-	while ((c = getchar()) != EOF && c != '\n')
+	fflush(stdout);
+
+	if (*linebuff == NULL || *n == 0)
 	{
-		/* Add the character to the buffer if there is space */
-		if (pos < (BUFFER_SIZE - 1))
-			buffer[pos++] = c;
-	}
-
-	/* Add a null terminator to the end of the buffer */
-	buffer[pos] = '\0';
-	pos = 0;
-
-	return buffer;
-}
-
-int main()
-{
-	char *line;
-	while (1)
-	{
-		printf("> ");
-		line = custom_getline();
-		while (*line)
+		buff_size = BUFFER_SIZE;
+		*linebuff = (char *)malloc(buff_size);
+		if (*linebuff == NULL)
 		{
-			putchar(*line);
-			line++;
+			perror("malloc");
+			return (-1);
 		}
-		putchar(10);
 	}
+	while ((byte_read = read(STDIN_FILENO, &c, 1) != -1))
+	{
+		(*linebuff)[len++] = c;
+		if (len >= buff_size)
+		{
+			buff_size += BUFFER_SIZE;
+			*linebuff = (char *)realloc(*linebuff, *n);
+			if (*linebuff == NULL)
+			{
+				perror("realloc");
+				free(*linebuff);
+				return (-1);
+			}
+		}
 
-	return 0;
+		if (c == '\n')
+			break;
+	}
+	
+	(*linebuff)[len] = '\0';
+
+	if (byte_read == -1)
+	{
+		perror("read");
+		free(*linebuff);
+		return (-1);
+	}
+	if (len == 0 && byte_read == 0)
+		return (-1);
+
+	return (len);
 }
