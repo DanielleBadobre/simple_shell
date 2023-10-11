@@ -21,7 +21,7 @@ char *_strtok(char *str, const char *delim, char **saveptr)
 	/* Find the start of the token */
 	char *token_start = *saveptr;
 
-	while (*token_start != '\0' && strchr(delim, *token_start) != NULL)
+	while (*token_start != '\0' && _strchr(delim, *token_start) != NULL)
 		token_start++;
 
 	if (*token_start == '\0')
@@ -33,7 +33,7 @@ char *_strtok(char *str, const char *delim, char **saveptr)
 	/* Find the end of the token*/
 	char *token_end = token_start;
 
-	while (*token_end != '\0' && strchr(delim, *token_end) == NULL)
+	while (*token_end != '\0' && _strchr(delim, *token_end) == NULL)
 		token_end++;
 
 	/* Null-terminate the token and update saveptr */
