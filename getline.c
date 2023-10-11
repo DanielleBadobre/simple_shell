@@ -2,8 +2,8 @@
 
 ssize_t _getline(char **linebuff, size_t *n)
 {
-	int c;
-	ssize_t byte_read, buff_size, len = 0;
+	int c = 0;
+	ssize_t byte_read = 0, buff_size, len = 0;
 	*n = 0;
 	buff_size = *n;
 	*linebuff = NULL;
