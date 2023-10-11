@@ -14,6 +14,9 @@
 #define TRUE 1
 #define BUFFER_SIZE 4321
 ssize_t _getline(char **linebuff, size_t *n);
+size_t handle_eof_or_error(char **linebuff, ssize_t byte_read, size_t len);
+size_t read_input(char **linebuff, size_t *n, size_t *len);
+char *_strtok(char *str, const char *delim, char **saveptr);
 
 
 #endif
