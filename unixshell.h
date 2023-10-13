@@ -16,5 +16,6 @@
 char *_strtok(char *str, const char *delim, char **saveptr);
 char *_strchr(const char *s, char c);
 ssize_t _getline(char **linebuff, size_t *n);
+char *_strdup(char *str);
 
 #endif
