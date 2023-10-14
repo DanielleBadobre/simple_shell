@@ -6,6 +6,7 @@ void execute_command(char *line)
 	char *token, *saveptr;
 	char *cmd_arg[BUFSIZ] = {NULL};
 	int i = 0;
+	pid_t child_pid;
 
 	token = _strtok(line, DELIM, &saveptr);
 
@@ -20,7 +21,7 @@ void execute_command(char *line)
 	if (i == 0)
 		return;
 
-	pid_t child_pid = fork();
+	child_pid = fork();
 	if (child_pid == 0)
 	{
 		if (execve(cmd_arg[0], cmd_arg, NULL) == -1)

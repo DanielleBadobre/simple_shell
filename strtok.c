@@ -12,6 +12,9 @@
  **/
 char *_strtok(char *str, const char *delim, char **saveptr)
 {
+	char *token_start;
+	char *token_end;
+
 	if (str != NULL)
 		*saveptr = str;
 
@@ -19,7 +22,7 @@ char *_strtok(char *str, const char *delim, char **saveptr)
 		return (NULL); /* No more tokens to tokenize */
 
 	/* Find the start of the token */
-	char *token_start = *saveptr;
+	token_start = *saveptr;
 
 	while (*token_start != '\0' && _strchr(delim, *token_start) != NULL)
 		token_start++;
@@ -31,7 +34,7 @@ char *_strtok(char *str, const char *delim, char **saveptr)
 	}
 
 	/* Find the end of the token*/
-	char *token_end = token_start;
+	token_end = token_start;
 
 	while (*token_end != '\0' && _strchr(delim, *token_end) == NULL)
 		token_end++;
