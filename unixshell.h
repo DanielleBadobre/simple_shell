@@ -28,7 +28,7 @@ int memalloc(char **linebuff, size_t *n);
 
 int _putchar(char c);
 int print(char *str);
-int execute_command(char *line, char *argv[]);
+void execute_command(char *line);
 
 
 #endif

@@ -25,7 +25,7 @@ int memalloc(char **linebuff, size_t *n)
 }
 ssize_t _getline(char **linebuff, size_t *n)
 {
-	static int c;
+	static	int c;
 	ssize_t byte_read;
 	size_t i = 0;
 

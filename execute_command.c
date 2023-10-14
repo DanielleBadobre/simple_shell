@@ -1,41 +1,45 @@
 #include "unixshell.h"
 
-int execute_command(char *line, char *argv[])
+
+void execute_command(char *line)
 {
+	char *token, *saveptr;
+	char *cmd_arg[BUFSIZ] = {NULL};
+	int i = 0;
 
-	char *saveptr;
-	char *token;
-	char *dup = _strdup(line);
+	token = _strtok(line, DELIM, &saveptr);
 
-	token = _strtok(dup, DELIM, &saveptr);
 	while (token != NULL)
 	{
-		pid_t child_pid = fork();
-		if (child_pid == 0)
-		{
-			if (execve(token, argv, NULL) == -1)
-			{
-				perror("execve failed");
-				exit(EXIT_FAILURE);
-			}
-		}
-		else if (child_pid < 0)
-		{
-			perror("fork failed");
-		}
-		else
-		{
-			int status;
-			wait(&status);
-			// if (WIFEXITED(status))
-			// printf("Child process exited with status: %d\n", WEXITSTATUS(status));
-			// else`
-			// perror("Child process did not exit normally");
-		}
+		cmd_arg[i++] = token;
 		token = _strtok(NULL, DELIM, &saveptr);
 	}
 
-	free(dup);
-	return 1;
-}
+	cmd_arg[i] = NULL;
 
+	if (i == 0)
+		return;
+
+	pid_t child_pid = fork();
+	if (child_pid == 0)
+	{
+		if (execvp(cmd_arg[0], cmd_arg) == -1)
+		{
+			perror("execvp failed");
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	else if (child_pid < 0)
+		perror("fork failed");
+
+	else
+	{
+		int status;
+		wait(&status);
+		if (WIFEXITED(status))
+			printf("Child process exited with status: %d\n", WEXITSTATUS(status));
+		else
+			perror("Child process did not exit normally");
+	}
+}

@@ -1,29 +1,28 @@
 #include "unixshell.h"
 
-int main(int argc, char *argv[], char **env)
+int main(void)
 {
-	(void)argc;
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t readline;
-	char *token, *saveptr, *dup;
-	pid_t pid;
-	char *cmd_arg[] = {NULL, NULL};
-
-//	while (TRUE)
+	while (TRUE)
 	{
-		print("$ ");
-		fflush(stdout);
+		char *line = NULL;
+		size_t len = 0;
 
-		readline = _getline(&line, &len);
-		if (readline == -1)
+		if (isatty(STDIN_FILENO))
+			print("$ ");
+
+		if (getline(&line, &len, stdin) == -1)
 		{
-			_putchar(10);
+			putchar(10);
 			free(line);
 			exit(EXIT_SUCCESS);
 		}
-		execute_command(line, argv);
+
+		if (line[0] != '\n')
+		{
+			line[strcspn(line, "\n")] = '\0';
+			execute_command(line);
+		}
+		free(line);
 	}
-	free(line);
 	return 0;
 }
