@@ -10,12 +10,24 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <string.h>
+#include <errno.h>
 
 #define TRUE 1
-#define BUFFER_SIZE 4321
+#define BUFFER_SIZE 12
+#define DELIM " \n\t"
+
 char *_strtok(char *str, const char *delim, char **saveptr);
 char *_strchr(const char *s, char c);
-ssize_t _getline(char **linebuff, size_t *n);
+char *_strcpy(char *dest, char *src);
 char *_strdup(char *str);
+
+size_t _strlen(char *str);
+ssize_t _getline(char **linebuff, size_t *n);
+
+int _putchar(char c);
+int print(char *str);
+int execute_command(char *line, char *argv[]);
+
 
 #endif
