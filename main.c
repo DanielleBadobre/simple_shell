@@ -10,13 +10,12 @@ int main(void)
 		if (isatty(STDIN_FILENO))
 			print("$ ");
 
-		if (getline(&line, &len, stdin) == -1)
+		if (_getline(&line, &len) == -1)
 		{
 			putchar(10);
 			free(line);
 			exit(EXIT_SUCCESS);
 		}
-
 		if (line[0] != '\n')
 		{
 			line[strcspn(line, "\n")] = '\0';
@@ -24,5 +23,5 @@ int main(void)
 		}
 		free(line);
 	}
-	return 0;
+	return (0);
 }

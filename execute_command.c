@@ -23,7 +23,7 @@ void execute_command(char *line)
 	pid_t child_pid = fork();
 	if (child_pid == 0)
 	{
-		if (execvp(cmd_arg[0], cmd_arg) == -1)
+		if (execve(cmd_arg[0], cmd_arg, NULL) == -1)
 		{
 			perror("execvp failed");
 			exit(EXIT_FAILURE);
