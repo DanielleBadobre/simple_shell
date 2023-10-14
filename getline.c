@@ -8,12 +8,8 @@
  * Return: Characters read
  **/
 
-ssize_t _getline(char **linebuff, size_t *n)
+int memalloc(char **linebuff, size_t *n)
 {
-	int c = 0;
-	ssize_t byte_read;
-	size_t i = 0;
-
 	if (*linebuff == NULL || *n == 0)
 	{
 		*n = BUFFER_SIZE;
@@ -21,33 +17,53 @@ ssize_t _getline(char **linebuff, size_t *n)
 		if (*linebuff == NULL)
 		{
 			perror("malloc");
-			return (-1);
+			return -1;
 		}
 	}
-	while (c != EOF && c != '\n')
-	{
-		byte_read = read(STDIN_FILENO, &c, 1);
-		if (byte_read == -1)
-		{
-			perror("Unable to read");
-			return (-1);
-		}
-		(*linebuff)[i++] = c;
-		if (i == *n)
-		{
-			*n += BUFFER_SIZE;
-			char *temp = realloc(*linebuff, *n);
 
-			if (temp == NULL)
+	return 1;
+}
+ssize_t _getline(char **linebuff, size_t *n)
+{
+	static int c;
+	ssize_t byte_read;
+	size_t i = 0;
+
+	memalloc(linebuff, n);
+
+	while ((byte_read = read(STDIN_FILENO, &c, 1)) > 0)
+	{
+		(*linebuff)[i] = c;
+		if (c == '\n')
+		{
+			(*linebuff)[i] = '\0';
+			return i;          
+		}
+
+		i++;
+		if (i >= *n)
+		{
+			*n += BUFFER_SIZE; /* Increase the buffer size */
+			*linebuff = (char *)realloc(*linebuff, *n);
+			if (*linebuff == NULL)
 			{
 				perror("realloc");
-				free(*linebuff);
-				*linebuff = NULL;
-				return (-1);
+				return -1;
 			}
-			*linebuff = temp;
 		}
 	}
+
+	if (byte_read == -1)
+	{
+		perror("read");
+		free(*linebuff);
+		return -1;
+	}
+
 	(*linebuff)[i] = '\0';
-	return (i);
+
+	if (i == 0 && byte_read == 0)
+		return -1; /* No characters read, reached EOF */
+
+	return i;
 }

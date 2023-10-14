@@ -24,6 +24,7 @@ char *_strdup(char *str);
 
 size_t _strlen(char *str);
 ssize_t _getline(char **linebuff, size_t *n);
+int memalloc(char **linebuff, size_t *n);
 
 int _putchar(char c);
 int print(char *str);

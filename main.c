@@ -18,8 +18,9 @@ int main(int argc, char *argv[], char **env)
 		readline = _getline(&line, &len);
 		if (readline == -1)
 		{
-			perror("Unable to getline");
-			return -1;
+			_putchar(10);
+			free(line);
+			exit(EXIT_SUCCESS);
 		}
 		execute_command(line, argv);
 	}
