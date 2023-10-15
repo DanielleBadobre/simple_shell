@@ -1,6 +1,5 @@
 #include "unixshell.h"
 
-
 void execute_command(char *line)
 {
 	char *token, *saveptr;
@@ -20,12 +19,24 @@ void execute_command(char *line)
 	if (i == 0)
 		return;
 
+	if (_strcmp(cmd_arg[0], "cd") == 0)
+	{
+		if (chdir(cmd_arg[1]) != 0)
+			perror("cd");
+		return;
+	}
+	if (_strcmp(cmd_arg[0], "exit") == 0)
+	{
+		free(line);
+		exit(EXIT_SUCCESS);
+	}
+			
 	pid_t child_pid = fork();
 	if (child_pid == 0)
 	{
 		if (execve(cmd_arg[0], cmd_arg, NULL) == -1)
 		{
-			perror("execvp failed");
+			perror("execve failed");
 			exit(EXIT_FAILURE);
 		}
 	}

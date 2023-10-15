@@ -2,10 +2,14 @@
 
 int main(void)
 {
+	char *line = NULL;
+	
+	size_t len = 0;
+	int count = 0;
 	while (TRUE)
 	{
-		char *line = NULL;
-		size_t len = 0;
+
+		count++;
 
 		if (isatty(STDIN_FILENO))
 			print("$ ");
@@ -21,7 +25,8 @@ int main(void)
 			line[strcspn(line, "\n")] = '\0';
 			execute_command(line);
 		}
-		free(line);
 	}
+
+	free(line);
 	return (0);
 }
