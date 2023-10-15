@@ -20,7 +20,6 @@ void execute_command(char *line)
 	if (i == 0)
 		return;
 
-<<<<<<< HEAD
 	if (_strcmp(cmd_arg[0], "cd") == 0)
 	{
 		if (chdir(cmd_arg[1]) != 0)
@@ -33,10 +32,7 @@ void execute_command(char *line)
 		exit(EXIT_SUCCESS);
 	}
 			
-	pid_t child_pid = fork();
-=======
 	child_pid = fork();
->>>>>>> fac790c340e2d4d4580d7103e651c6e48310cb42
 	if (child_pid == 0)
 	{
 		if (execve(cmd_arg[0], cmd_arg, NULL) == -1)
