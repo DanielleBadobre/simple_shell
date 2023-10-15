@@ -92,4 +92,59 @@ int _strcmp(char *s1, char *s2)
 		i++;
 	}
 	return (0);
+
 }
+
+/**
+ * _strcpy - copies the string pointed to by src, including the terminating null byte
+ * to the buffer pointed to by dest.
+ *
+ * @dest: destination
+ * @src: source
+ * Return: the pointer to dest
+ *
+ **/
+
+char *_strcpy(char *dest, char *src)
+{
+	int count = 0;
+
+	while (count >= 0)
+	{
+		*(dest + count) = *(src + count);
+		if (*(src + count) == '\0')
+			break;
+		count++;
+	}
+	return (dest);
+}
+
+/**
+ * _strcat - concatenates two strings
+ * @dest: input value
+ * @src: input value
+ *
+ * Return: a pointer to the concatenated string
+ **/
+
+char *_strcat(char *dest, char *src)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (dest[i] != '\0')
+	{
+		i++;
+	}
+	j = 0;
+	while (src[j] != '\0')
+	{
+		dest[i] = src[j];
+		i++;
+		j++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
