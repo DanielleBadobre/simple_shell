@@ -23,6 +23,7 @@ int memalloc(char **linebuff, size_t *n)
 
 	return 1;
 }
+
 ssize_t _getline(char **linebuff, size_t *n)
 {
 	static	int c;

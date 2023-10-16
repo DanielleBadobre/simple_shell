@@ -1,6 +1,5 @@
 #include "unixshell.h"
 
-
 void execute_command(char *line)
 {
 	char *token, *saveptr;
@@ -21,13 +20,63 @@ void execute_command(char *line)
 	if (i == 0)
 		return;
 
+	if (_strcmp(cmd_arg[0], "cd") == 0)
+	{
+		if (cmd_arg[1] == NULL)
+			chdir(getenv("HOME"));
+		else
+			chdir(cmd_arg[1]);
+		return;
+
+	}
+	if (_strcmp(cmd_arg[0], "exit") == 0)
+	{
+		free(line);
+		exit(EXIT_SUCCESS);
+	}
+
 	child_pid = fork();
 	if (child_pid == 0)
 	{
-		if (execve(cmd_arg[0], cmd_arg, NULL) == -1)
+		char c = '/';
+		if (_strchr(cmd_arg[0], c) == NULL)
 		{
-			perror("execvp failed");
-			exit(EXIT_FAILURE);
+			char *path = getenv("PATH");
+			char *saveptr;
+			char *path_copy = _strdup(path);
+			char *dir = _strtok(path_copy, ":", &saveptr);
+
+			while (dir != NULL)
+			{
+				char *full_path = malloc(_strlen(dir) + _strlen(cmd_arg[0]) + 2);
+				_strcpy(full_path, dir);
+				_strcat(full_path, "/");
+				_strcat(full_path, cmd_arg[0]);
+
+				if (access(full_path, X_OK) == 0)
+				{
+					execve(full_path, cmd_arg, NULL);
+					free(full_path);
+					break;
+				}
+				free(full_path);
+				dir = _strtok(NULL, ":", &saveptr);
+			}
+
+			free(path_copy);
+			if (dir == NULL)
+			{
+				fprintf(stderr, "%s: command not found\n", cmd_arg[0]);
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			if (execve(cmd_arg[0], cmd_arg, NULL) == -1)
+			{
+				perror("execve failed");
+				exit(EXIT_FAILURE);
+			}
 		}
 	}
 

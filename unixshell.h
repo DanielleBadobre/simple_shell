@@ -21,14 +21,19 @@ char *_strtok(char *str, const char *delim, char **saveptr);
 char *_strchr(const char *s, char c);
 char *_strcpy(char *dest, char *src);
 char *_strdup(char *str);
+char *_strcat(char *dest, char *src);
 
-size_t _strlen(char *str);
-ssize_t _getline(char **linebuff, size_t *n);
+
+int _strlen(char *str);
+int _strcmp(char *s1, char *s2);
 int memalloc(char **linebuff, size_t *n);
-
 int _putchar(char c);
 int print(char *str);
+
+
 void execute_command(char *line);
+void msgerror(char *name, int fact, char **cmd_opt);
+void getpath(char **PATH);
 
-
+ssize_t _getline(char **linebuff, size_t *n);
 #endif
