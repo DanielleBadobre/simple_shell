@@ -34,13 +34,12 @@ int print(char *str);
 
 
 
-void execute_command(char *line, char **env);
 void msgerror(char *name, int fact, char **cmd_opt);
 void getpath(char **PATH);
 void handle_cd_exit(char *cmd_arg[], char *line);
-void handle_exec(char *cmd_arg[]);
+void handle_exec(char *cmd_arg[], int line_count);
 void print_env(char **env);
-
+void execute_command(char *line, char **env, int line_count);
 
 ssize_t _getline(char **linebuff, size_t *n);
 #endif
