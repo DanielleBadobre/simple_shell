@@ -19,6 +19,7 @@ void msgerror(char *name, int fact, char **cmd_opt)
 	write(STDOUT_FILENO, ": ", 2);
 	write(STDOUT_FILENO, cmd_opt[0], _strlen(cmd_opt[0]));
 	write(STDOUT_FILENO, ": not found\n", 12);
+<<<<<<< HEAD
 }
 
 /**
@@ -37,3 +38,6 @@ void print_env(char **env)
 		i++;
 	}
 }
+=======
+}
+>>>>>>> 6e4d84f8af6326556afe88ce7e9d7a8556b01b76
