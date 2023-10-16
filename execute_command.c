@@ -1,6 +1,38 @@
 #include "unixshell.h"
 
-void execute_command(char *line)
+void handle_exec(char *cmd_arg[])
+{
+    char *path = getenv("PATH");
+    char *saveptr;
+    char *path_copy = _strdup(path);
+    char *dir = _strtok(path_copy, ":", &saveptr);
+
+    while (dir != NULL)
+    {
+        char *full_path = malloc(_strlen(dir) + _strlen(cmd_arg[0]) + 2);
+        _strcpy(full_path, dir);
+        _strcat(full_path, "/");
+        _strcat(full_path, cmd_arg[0]);
+
+        if (access(full_path, X_OK) == 0)
+        {
+            execve(full_path, cmd_arg, NULL);
+            free(full_path);
+            break;
+        }
+        free(full_path);
+        dir = _strtok(NULL, ":", &saveptr);
+    }
+
+    free(path_copy);
+    if (dir == NULL)
+    {
+        fprintf(stderr, "%s: command not found\n", cmd_arg[0]);
+        exit(EXIT_FAILURE);
+    }
+}
+
+void execute_command(char *line, char **env)
 {
 	char *token, *saveptr;
 	char *cmd_arg[BUFSIZ] = {NULL};
@@ -35,41 +67,20 @@ void execute_command(char *line)
 		exit(EXIT_SUCCESS);
 	}
 
+	if (_strcmp(cmd_arg[0], "env") == 0)
+	{
+		print_env(env);
+	}
+
 	child_pid = fork();
 	if (child_pid == 0)
 	{
 		char c = '/';
 		if (_strchr(cmd_arg[0], c) == NULL)
 		{
-			char *path = getenv("PATH");
-			char *saveptr;
-			char *path_copy = _strdup(path);
-			char *dir = _strtok(path_copy, ":", &saveptr);
-
-			while (dir != NULL)
-			{
-				char *full_path = malloc(_strlen(dir) + _strlen(cmd_arg[0]) + 2);
-				_strcpy(full_path, dir);
-				_strcat(full_path, "/");
-				_strcat(full_path, cmd_arg[0]);
-
-				if (access(full_path, X_OK) == 0)
-				{
-					execve(full_path, cmd_arg, NULL);
-					free(full_path);
-					break;
-				}
-				free(full_path);
-				dir = _strtok(NULL, ":", &saveptr);
-			}
-
-			free(path_copy);
-			if (dir == NULL)
-			{
-				fprintf(stderr, "%s: command not found\n", cmd_arg[0]);
-				exit(EXIT_FAILURE);
-			}
+			handle_exec(cmd_arg);
 		}
+
 		else
 		{
 			if (execve(cmd_arg[0], cmd_arg, NULL) == -1)

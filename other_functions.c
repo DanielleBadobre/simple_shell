@@ -20,3 +20,20 @@ void msgerror(char *name, int fact, char **cmd_opt)
 	write(STDOUT_FILENO, cmd_opt[0], _strlen(cmd_opt[0]));
 	write(STDOUT_FILENO, ": not found\n", 12);
 }
+
+/**
+ * print_env - A function that prints all enviromental variables.
+ * @env: The pointer to enviromental variables.
+ */
+void print_env(char **env)
+{
+	size_t i = 0, len = 0;
+
+	while (env[i])
+	{
+		len = _strlen(env[i]);
+		write(STDOUT_FILENO, env[i], len);
+		write(STDOUT_FILENO, "\n", 1);
+		i++;
+	}
+}

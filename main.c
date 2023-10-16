@@ -1,6 +1,6 @@
 #include "unixshell.h"
 
-int main(void)
+int main(int argc, char *argv[], char **env)
 {
 	char *line = NULL;
 	
@@ -23,7 +23,7 @@ int main(void)
 		if (line[0] != '\n')
 		{
 			line[strcspn(line, "\n")] = '\0';
-			execute_command(line);
+			execute_command(line, env);
 		}
 	}
 
