@@ -29,12 +29,12 @@ int memalloc(char **linebuff, size_t *n);
 int _putchar(char c);
 int print(char *str);
 int _atoi(char *s);
-
-void execute_command(char *line, char **env);
+int change_dir(const char *path_name);
 void msgerror(char *name, int fact, char **cmd_opt);
-void getpath(char **PATH);
-void handle_cd_exit(char *cmd_arg[], char *line);
-void handle_exec(char *cmd_arg[]);
+
+
+void handle_exec(char *cmd_arg[], int count, char *filename, char **env);
+void execute_command(char *line, int count, char *filename, char **env);
 void print_env(char **env);
 
 ssize_t _getline(char **linebuff, size_t *n);

@@ -3,12 +3,11 @@
 int main(int argc, char *argv[], char **env)
 {
 	char *line = NULL;
-	
+
 	size_t len = 0;
 	int count = 0;
 	while (TRUE)
 	{
-
 		count++;
 
 		if (isatty(STDIN_FILENO))
@@ -23,7 +22,7 @@ int main(int argc, char *argv[], char **env)
 		if (line[0] != '\n')
 		{
 			line[strcspn(line, "\n")] = '\0';
-			execute_command(line, env);
+			execute_command(line, count, argv[0], env);
 		}
 	}
 

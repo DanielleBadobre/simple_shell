@@ -1,6 +1,6 @@
 #include "unixshell.h"
 
-void handle_exec(char *cmd_arg[])
+void handle_exec(char *cmd_arg[], int count, char *filename, char **env)
 {
     char *path = getenv("PATH");
     char *saveptr;
@@ -16,7 +16,7 @@ void handle_exec(char *cmd_arg[])
 
         if (access(full_path, X_OK) == 0)
         {
-            execve(full_path, cmd_arg, NULL);
+            execve(full_path, cmd_arg, env);
             free(full_path);
             break;
         }
@@ -25,41 +25,16 @@ void handle_exec(char *cmd_arg[])
     }
 
     free(path_copy);
-    if (dir == NULL)
-    {
-        fprintf(stderr, "%s: command not found\n", cmd_arg[0]);
-        exit(EXIT_FAILURE);
-    }
+     if (dir == NULL)
+     {
+         msgerror(filename, count, cmd_arg);
+         exit(EXIT_FAILURE);
+     }
 }
 
-void execute_command(char *line, char **env)
+void handle_cd_exit(char *cmd_arg[], char *line, int count, char *filename)
 {
-    char *token, *saveptr;
-    char *cmd_arg[BUFSIZ] = {NULL};
-    int i = 0;
-    pid_t child_pid;
 
-    token = _strtok(line, DELIM, &saveptr);
-
-    while (token != NULL)
-    {
-        cmd_arg[i++] = token;
-        token = _strtok(NULL, DELIM, &saveptr);
-    }
-
-    cmd_arg[i] = NULL;
-
-    if (i == 0)
-        return;
-
-    if (_strcmp(cmd_arg[0], "cd") == 0)
-    {
-        if (cmd_arg[1] == NULL)
-            chdir(getenv("HOME"));
-        else
-            chdir(cmd_arg[1]);
-        return;
-    }
     if (_strcmp(cmd_arg[0], "exit") == 0)
     {
         if (cmd_arg[1] != NULL)
@@ -71,48 +46,62 @@ void execute_command(char *line, char **env)
                 exit(status);
             }
             else
-            {
-                write(STDERR_FILENO, "Usage: exit status", 19);
-            }
+                msgerror(filename, count, cmd_arg);
         }
         free(line);
         exit(EXIT_SUCCESS);
+    }    
+}
+
+void execute_command(char *line, int count, char *filename, char **env)
+{
+    char *token, *saveptr, *cmd_arg[BUFSIZ] = {NULL};
+    int i = 0;
+    pid_t child_pid;
+
+    token = _strtok(line, DELIM, &saveptr);
+    while (token != NULL)
+    {
+        cmd_arg[i++] = token;
+        token = _strtok(NULL, DELIM, &saveptr);
     }
+    cmd_arg[i] = NULL;
+
+    if (i == 0)
+        return;
+
+    handle_cd_exit(cmd_arg, line, count, filename);
 
     if (_strcmp(cmd_arg[0], "env") == 0)
-    {
         print_env(env);
+
+    if (_strcmp(cmd_arg[0], "cd") == 0)
+    {
+        change_dir(cmd_arg[1]);
+        return;
     }
 
-    child_pid = fork();
-    if (child_pid == 0)
-    {
-        char c = '/';
-        if (_strchr(cmd_arg[0], c) == NULL)
+        child_pid = fork();
+        if (child_pid == 0)
         {
-            handle_exec(cmd_arg);
-        }
+            char c = '/';
+            if (_strchr(cmd_arg[0], c) == NULL)
+                handle_exec(cmd_arg, count, filename, env);
 
-        else
-        {
-            if (execve(cmd_arg[0], cmd_arg, NULL) == -1)
+            else if (execve(cmd_arg[0], cmd_arg, env) == -1)
             {
-                perror("execve failed");
+                msgerror(filename, count, cmd_arg);
                 exit(EXIT_FAILURE);
             }
-        }
     }
-
     else if (child_pid < 0)
-        perror("fork failed");
-
+    {
+        msgerror(filename, count, cmd_arg);
+    }
+    
     else
     {
         int status;
         wait(&status);
-        if (WIFEXITED(status))
-            printf("Child process exited with status: %d\n", WEXITSTATUS(status));
-        else
-            perror("Child process did not exit normally");
     }
 }

@@ -8,6 +8,7 @@
  * Return: Nothing.
  *
  **/
+
 void msgerror(char *name, int value, char **cmd_opt)
 {
     char c;
@@ -21,6 +22,7 @@ void msgerror(char *name, int value, char **cmd_opt)
     write(STDOUT_FILENO, ": not found\n", 12);
 
 }
+
 
 /**
  * print_env - A function that prints all enviromental variables.
@@ -38,7 +40,6 @@ void print_env(char **env)
         i++;
     }
 }
-
 
 /**
  * _atoi - converts a string to an integer
@@ -73,3 +74,22 @@ int _atoi(char *s)
     return (oi * pn);
 }
 
+/**
+ * change_dir - function that changes working directory.
+ * @path_name: new current working directory.
+ * Return: 0 on success, -1 on failure.
+ */
+int change_dir(const char *path_name)
+{
+    char *buf = NULL;
+    size_t size = 1024;
+
+    if (path_name == NULL)
+        path_name = getcwd(buf, size);
+    if (chdir(path_name) == -1)
+    {
+        perror(path_name);
+        return (98);
+    }
+    return (1);
+}
