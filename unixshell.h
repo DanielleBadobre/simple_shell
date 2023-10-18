@@ -37,7 +37,7 @@ void handle_exec(char *cmd_arg[], int count, char *filename, char **env);
 void execute_command(char *line, int count, char *filename, char **env);
 void print_env(char **env);
 void handle_exit(char *cmd_arg[], char *line, int count, char *filename);
-
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 
 ssize_t _getline(char **linebuff, size_t *n);
 

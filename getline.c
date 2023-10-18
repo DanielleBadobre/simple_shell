@@ -30,7 +30,7 @@ ssize_t _getline(char **linebuff, size_t *n)
 		if (i >= *n)
 		{
 			*n += BUFFER_SIZE; /* Increase the buffer size */
-			*linebuff = (char *)realloc(*linebuff, *n);
+			*linebuff = (char *)_realloc(*linebuff, *n, (*n * 2));
 			if (*linebuff == NULL)
 			{
 				perror("realloc");

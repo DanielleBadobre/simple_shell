@@ -26,7 +26,7 @@ int main(int argc, char *argv[], char **env)
 
 		signal(SIGINT, signal_input);
 
-		if (getline(&line, &len, stdin) == -1)
+		if (_getline(&line, &len) == -1)
 		{
 			putchar(10);
 			free(line);

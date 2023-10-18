@@ -104,4 +104,3 @@ void signal_input(int signal)
 	(void)signal;
 	write(STDOUT_FILENO, "\n$ ", 4);
 }
-
