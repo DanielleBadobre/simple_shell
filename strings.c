@@ -51,7 +51,8 @@ char *_strdup(char *str)
 	return (strout);
 }
 
-/**_strlen - a function to return the length of a string
+/**
+ * _strlen - a function to return the length of a string
  * @str: the string
  *
  * Return: The length of the string
@@ -72,12 +73,12 @@ int _strlen(char *str)
 
 
 /**
- *  * _strcmp - compare string values
- *   * @s1: input value
- *    * @s2: input value
- *     *
- *      * Return: s1[i] - s2[i]
- *       */
+ * _strcmp - compare string values
+ * @s1: input value
+ * @s2: input value
+ *
+ * Return: s1[i] - s2[i]
+ **/
 int _strcmp(char *s1, char *s2)
 {
 	int i;
@@ -93,30 +94,6 @@ int _strcmp(char *s1, char *s2)
 	}
 	return (0);
 
-}
-
-/**
- * _strcpy - copies the string pointed to by src, including the terminating null byte
- * to the buffer pointed to by dest.
- *
- * @dest: destination
- * @src: source
- * Return: the pointer to dest
- *
- **/
-
-char *_strcpy(char *dest, char *src)
-{
-	int count = 0;
-
-	while (count >= 0)
-	{
-		*(dest + count) = *(src + count);
-		if (*(src + count) == '\0')
-			break;
-		count++;
-	}
-	return (dest);
 }
 
 /**

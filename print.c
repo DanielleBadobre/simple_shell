@@ -14,7 +14,7 @@ int _putchar(char c)
 }
 
 /**
- * _print - prints the character c to stdout
+ * print - prints the character c to stdout
  * @str: The str to print
  *
  * Return: On success 1.
@@ -24,9 +24,10 @@ int _putchar(char c)
 int print(char *str)
 {
 	int count;
+
 	count = 0;
 
-	while(*str)
+	while (*str)
 	{
 		count += _putchar(*str);
 		str++;

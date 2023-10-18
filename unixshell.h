@@ -23,17 +23,22 @@ char *_strcpy(char *dest, char *src);
 char *_strdup(char *str);
 char *_strcat(char *dest, char *src);
 
-
 int _strlen(char *str);
 int _strcmp(char *s1, char *s2);
 int memalloc(char **linebuff, size_t *n);
 int _putchar(char c);
 int print(char *str);
+int _atoi(char *s);
+int change_dir(const char *path_name);
 
-
-void execute_command(char *line);
 void msgerror(char *name, int fact, char **cmd_opt);
-void getpath(char **PATH);
+void signal_input(int signal);
+void handle_exec(char *cmd_arg[], int count, char *filename, char **env);
+void execute_command(char *line, int count, char *filename, char **env);
+void print_env(char **env);
+void handle_exit(char *cmd_arg[], char *line, int count, char *filename);
+
 
 ssize_t _getline(char **linebuff, size_t *n);
+
 #endif

@@ -1,18 +1,29 @@
 #include "unixshell.h"
 
-int main(void)
+/**
+ * main - the entry point of every program
+ * @argc: argument count
+ * @argv: argument vector
+ * @env: environmental variable
+ *
+ * Return: On success 0
+ **/
+
+int main(int argc, char *argv[], char **env)
 {
 	char *line = NULL;
-	
+
 	size_t len = 0;
-	int count = 0;
+	argc = 0;
+
 	while (TRUE)
 	{
-
-		count++;
+		argc++;
 
 		if (isatty(STDIN_FILENO))
 			print("$ ");
+
+		signal(SIGINT, signal_input);
 
 		if (_getline(&line, &len) == -1)
 		{
@@ -23,7 +34,7 @@ int main(void)
 		if (line[0] != '\n')
 		{
 			line[strcspn(line, "\n")] = '\0';
-			execute_command(line);
+			execute_command(line, argc, argv[0], env);
 		}
 	}
 
