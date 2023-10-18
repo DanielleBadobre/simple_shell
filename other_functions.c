@@ -15,12 +15,12 @@ void msgerror(char *name, int value, char **cmd_opt)
 	char c;
 
 	c = value + '0';
-	write(STDOUT_FILENO, name, _strlen(name));
-	write(STDOUT_FILENO, ": ", 2);
-	write(STDOUT_FILENO, &c, 1);
-	write(STDOUT_FILENO, ": ", 2);
-	write(STDOUT_FILENO, cmd_opt[0], _strlen(cmd_opt[0]));
-	write(STDOUT_FILENO, ": not found\n", 12);
+	write(STDERR_FILENO, name, _strlen(name));
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, &c, 1);
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, cmd_opt[0], _strlen(cmd_opt[0]));
+	write(STDERR_FILENO, ": not found\n", 12);
 
 }
 
