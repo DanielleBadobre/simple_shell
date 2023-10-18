@@ -28,7 +28,6 @@ int main(int argc, char *argv[], char **env)
 
 		if (_getline(&line, &len) == -1)
 		{
-			putchar(10);
 			free(line);
 			exit(EXIT_SUCCESS);
 		}
