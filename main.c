@@ -14,6 +14,7 @@ int main(int argc, char *argv[], char **env)
 	char *line = NULL;
 
 	size_t len = 0;
+
 	argc = 0;
 
 	while (TRUE)
