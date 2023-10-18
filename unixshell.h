@@ -41,4 +41,5 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 
 ssize_t _getline(char **linebuff, size_t *n);
 
+size_t _strcspn(const char *str1, const char *str2);
 #endif
